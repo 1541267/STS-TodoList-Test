@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+  
+  <bean id="loginSuccessHandler" class="com.yoonsub.security.handler.LoginSuccessHandler"></bean>
+  <bean id="AccessDeniedHandler" class="com.yoonsub.security.handler.AccessDeniedHandler"></bean>
+<!--   <bean id="customNoPasswordEncoder" class="com.yoonsub.security.NoPasswordEncoder"></bean> -->
+  <!-- 암호화 x -->
+  <bean id="bcryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+  <bean id="customUserDetailsService" class="com.yoonsub.security.CustomUserDetailsService"></bean>
+ 
+ 
+  <security:http>
+ 
+    <security:intercept-url pattern="/todo/intro" access="permitAll" />
+
+    <security:intercept-url pattern="/todo/memberList" access="hasRole('ROLE_ADMIN')" />       
+    
+    <security:intercept-url pattern="/todo/list" access="hasRole('ROLE_MEMBER')"/>
+    <security:intercept-url pattern="/todo/add/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/>
+    <security:intercept-url pattern="/todo/complete/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/>
+    <security:intercept-url pattern="/todo/delete/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/>
+    <security:intercept-url pattern="/todo/memberModify/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/>
+    <security:intercept-url pattern="/todo/memberDelete/**" access="hasAnyRole('ROLE_ADMIN')"/>
+
+
+      <security:form-login login-page="/todo/login" login-processing-url="/todo/login" default-target-url="/todo/list" authentication-success-handler-ref="loginSuccessHandler"  />
+      <security:form-login login-page="/todo/login" login-processing-url="/todo/add" default-target-url="/todo/add" authentication-success-handler-ref="loginSuccessHandler"  />
+      <security:form-login login-page="/todo/login" login-processing-url="/todo/memberList" default-target-url="/todo/memberList" authentication-success-handler-ref="loginSuccessHandler"  />
+
+    <security:remember-me
+      data-source-ref="dataSource" token-validity-seconds="604800" />
+
+    <security:logout logout-url="/customLogout" logout-success-url="/todo/intro" invalidate-session="true"  delete-cookies="remember-me,JSESSION_ID"/>
+ 
+    <security:csrf disabled="true"/>
+    <security:access-denied-handler ref="AccessDeniedHandler"/>
+</security:http>
+<!--  
+  <security:http>
+        
+   <security:intercept-url pattern="/todo/intro" access="permitAll"/>
+   <security:intercept-url pattern="/todo/list" access="hasRole('ROLE_MEMBER')"/>
+   
+   <security:form-login login-page="/todo/login"/>
+   <security:form-login login-page="/todo/login" authentication-success-handler-ref="loginSuccessHandler"/>
+
+   
+   <security:logout logout-url="/todo/logout" invalidate-session="true" delete-cookies="JSESSION_ID" />
+   <security:access-denied-handler ref="AccessDeniedHandler"/>
+
+  </security:http> -->
+  
+  <security:authentication-manager>
+     <!--     <security:authentication-provider> 
+ -->
+<!--              <security:user-service>
+           <security:user name="member" password="member" authorities="ROLE_MEMBER" />
+        <security:user name="admin" password="admin"  authorities="ROLE_ADMIN"/>
+          </security:user-service> -->
+          
+           <security:authentication-provider user-service-ref="customUserDetailsService">
+<!--           <security:jdbc-user-service data-source-ref="dataSource"/> -->
+<!--              <security:jdbc-user-service data-source-ref="dataSource" 
+        users-by-username-query="select userid, userpw, enabled from yoonsub_member WHERE userid = ?"
+        authorities-by-username-query="SELECT userid, auth FROM yoonsub_member_auth WHERE userid = ?"/> -->
+       
+          
+<!--   <security:password-encoder ref="customNoPasswordEncoder"/> -->
+         
+          <security:password-encoder ref="bcryptPasswordEncoder"/>
+         
+      </security:authentication-provider>
+  </security:authentication-manager>
+  
+  
+</beans>

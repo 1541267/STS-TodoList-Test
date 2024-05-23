@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yoonsub.mapper.TodoMapper">
+  
+<!--    <select id="getList" resultType="com.yoonsub.domain.TodoVo">
+    SELECT * FROM yoonsub_todo where userid = #{userid}
+  </select>   --> 
+  
+  
+  <insert id="register">
+  
+		   INSERT INTO yoonsub_member (userid, userpw, username, tel, regdate, updatedate, enabled) 
+		    VALUES (#{userid}, #{userpw}, #{userName}, #{tel}, sysdate, sysdate, 1)
+ 
+  </insert>   
+   
+   
+  <insert id="registerAuth">
+     INSERT INTO yoonsub_member_auth(userid, auth) values (#{userid}, 'ROLE_MEMBER')
+  </insert>
+ 
+ 
+  <select id="getList" resultType="com.yoonsub.domain.TodoVo" parameterType="java.lang.String">
+     SELECT tno, title, userid, regDate, endDate FROM yoonsub_todo WHERE userid = #{userName} ORDER BY tno
+ </select>
+   
+
+<insert id="addTitle" parameterType="com.yoonsub.domain.TodoVo">
+
+<selectKey keyProperty="tno" resultType="Long" order="BEFORE">
+
+SELECT todo_tno_seq.NEXTVAL  From DUAL
+
+</selectKey>
+    INSERT INTO yoonsub_todo (tno, title, userid, regdate, enddate)
+    VALUES (#{tno}, #{title}, #{userName}, sysdate, null)
+</insert>
+
+
+   <update id="todoComplete">
+      UPDATE yoonsub_todo SET enddate = sysdate WHERE tno = #{tno}
+   </update>
+   
+   <update id="todoDelete">
+      DELETE yoonsub_todo where tno = #{tno}
+   </update>
+   
+   
+   <select id="getAllList" resultType="com.yoonsub.domain.MemberVo">
+      SELECT * FROM yoonsub_member
+   
+   </select>
+
+	<update id="memberModify">
+		UPDATE yoonsub_member SET userpw = #{userpw}, username = #{userName}, tel =	#{tel} WHERE userid = #{userid}
+	</update>
+
+	<delete id="memberDeleteTodo">
+		DELETE yoonsub_todo WHERE userid = #{userid}
+	</delete>
+
+	<delete id="memberDelete">
+		DELETE yoonsub_member WHERE userid = #{userid}
+	</delete>
+	<delete id="memberDeleteAuth">
+		DELETE yoonsub_member_auth WHERE userid = #{userid}
+	</delete>
+
+   
+ 
+ </mapper>
+  
