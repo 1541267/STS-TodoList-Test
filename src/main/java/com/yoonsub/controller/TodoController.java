@@ -1,4 +1,4 @@
-package com.yoonsub.controller;
+  package com.yoonsub.controller;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -139,6 +139,26 @@ public class TodoController {
         
     }
     
+    @GetMapping("/modify")
+    public String modifyTodo(@RequestParam("tno") String tno, Authentication auth, Model model) {
+        log.info("Todo Controller Get Modify.... username: " + auth.getName() + " tno: " + tno);       
+        
+        model.addAttribute("userid", auth.getName());
+        model.addAttribute("tno", tno);
+        return "./todo/modifyTodo";
+    }
+    
+    
+    @PostMapping("/modify")
+    public String postModifyTodo(@RequestParam("title") String title, Long tno, Authentication auth) {
+        log.info("Todo Controller Get Modify.... username: " + auth.getName() + " title: " + title) ;  
+        
+        
+        service.modifyTodo(title, tno);
+        
+        return "redirect:/todo/list";
+    }
+    
     @GetMapping("/complete")
     public String todoComplete(@RequestParam("tno") Long tno) {
         log.info("Todo Controller Update...... Tno : " + tno);
@@ -224,7 +244,6 @@ public class TodoController {
         model.addAttribute("userid", userid);
 
     }       
-    
     @Transactional
     @PostMapping("/memberDelete")
     public String postMemberDelete(@RequestParam("userid") String userid, Authentication auth) {

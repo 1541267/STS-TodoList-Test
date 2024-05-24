@@ -15,12 +15,20 @@
   .button-form {
     display : inline-block;
   }
-</style>
+  
+  #tno-modify:hover {
+    color: #ff0063;
+  }
+  #tno-modify:active {
+    color: skyblue;
+  }
+ </style>
 </head>
 <body>
     <h1>To-Do List</h1>
     <h2>반갑습니다, <c:out value="${userid}"/>님</h2>
     <h3>미완료 클릭시 작업을 완료합니다.</h3>
+    <h3>번호를 클릭시 Todo 내용을 수정 합니다.</h3>
         <table border='1'>
         <thead>
             <tr>
@@ -36,7 +44,7 @@
         <tbody>
           <c:forEach var="user" items="${users}">
             <tr>
-                <td>${user.tno}</td>
+                <td><a href="./modify?tno=${user.tno}" id="tno-modify"">${user.tno}</a></td>
                 <td>${user.title}</td>
                 <td>${user.userid}</td>
                 <td>${user.regDate}</td>

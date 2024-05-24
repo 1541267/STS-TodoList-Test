@@ -19,6 +19,8 @@ public interface TodoMapper {
 
     public void addTitle(@Param("title") String title, @Param("userName") String username);
 
+    public void modifyTodo(@Param("title") String title,@Param("tno") Long tno);
+    
     public void todoComplete(Long tno);
 
     public void todoDelete(Long tno);

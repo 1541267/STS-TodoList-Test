@@ -74,4 +74,11 @@ public class TodoServiceImpl implements TodoService {
         mapper.memberModify(memberVo);
     }
 
+    @Override
+    public void modifyTodo(String title, Long tno) {
+        log.info("LoginServiceImpl Modify Todo........");
+        mapper.modifyTodo(title, tno);
+        
+    }
+
 }

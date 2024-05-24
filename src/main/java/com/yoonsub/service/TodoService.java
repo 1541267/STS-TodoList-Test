@@ -31,4 +31,6 @@ public interface TodoService {
 
     //멤버 수정
     public void memberModify(MemberVo memberVo);
+
+    public void modifyTodo(String title, Long tno);
 }

@@ -48,8 +48,11 @@ SELECT todo_tno_seq.NEXTVAL  From DUAL
    
    <select id="getAllList" resultType="com.yoonsub.domain.MemberVo">
       SELECT * FROM yoonsub_member
-   
    </select>
+
+   <update id="modifyTodo">
+    UPDATE yoonsub_todo SET title = #{title} WHERE tno = #{tno}
+   </update>
 
 	<update id="memberModify">
 		UPDATE yoonsub_member SET userpw = #{userpw}, username = #{userName}, tel =	#{tel} WHERE userid = #{userid}
@@ -62,11 +65,13 @@ SELECT todo_tno_seq.NEXTVAL  From DUAL
 	<delete id="memberDelete">
 		DELETE yoonsub_member WHERE userid = #{userid}
 	</delete>
+
 	<delete id="memberDeleteAuth">
 		DELETE yoonsub_member_auth WHERE userid = #{userid}
 	</delete>
 
    
+ 
  
  </mapper>
   

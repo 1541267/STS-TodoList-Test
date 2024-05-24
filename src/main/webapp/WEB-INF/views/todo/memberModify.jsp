@@ -25,7 +25,7 @@
 		<button type="reset">초기화</button>
 		<button type="button" onclick="self.location='../todo/intro'">취소(메인 페이지로)</button>
     <input type="hidden" name="userid" value="${userid}"/>
-	</form>
+	</form>``
 
 
 </body>
