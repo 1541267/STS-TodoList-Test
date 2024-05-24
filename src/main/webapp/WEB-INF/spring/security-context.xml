@@ -28,6 +28,7 @@
     <security:intercept-url pattern="/todo/delete/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/>
     <security:intercept-url pattern="/todo/memberModify/**" access="hasAnyRole('ROLE_MEMBER','ROLE_ADMIN')"/>
     <security:intercept-url pattern="/todo/memberDelete/**" access="hasAnyRole('ROLE_ADMIN')"/>
+    <security:intercept-url pattern="/todo/modifyTodo/**" access="hasAnyRole('ROLE_MEMBER')"/>
 
 
       <security:form-login login-page="/todo/login" login-processing-url="/todo/login" default-target-url="/todo/list" authentication-success-handler-ref="loginSuccessHandler"  />
